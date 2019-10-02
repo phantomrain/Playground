@@ -1,0 +1,5 @@
+# IDEA
+/.idea/
+!/.idea/codeStyleSettings.xml
+!/.idea/codeStyles/
+!/.idea/inspectionProfiles/
