@@ -6,11 +6,11 @@ class IdCard {
 
     private Date dateExpire;
 
-    Date getDateExpire() {
-        return dateExpire;
+    IdCard(Date dateExpire) {
+        this.dateExpire = dateExpire;
     }
 
-    void setDateExpire(Date dateExpire) {
-        this.dateExpire = dateExpire;
+    Date getDateExpire() {
+        return dateExpire;
     }
 }

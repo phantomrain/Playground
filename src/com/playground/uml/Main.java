@@ -2,29 +2,70 @@ package com.playground.uml;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.stream.Collectors;
 
 
 public class Main {
 
-    public static void main(String[] args) throws ParseException {
+    private static Date yearBeginning;
+    private static final Department developers = new Department("Developers");
+    private static final Room developersRoom = new Room(2);
+
+    static {
+        try {
+            yearBeginning = new SimpleDateFormat("yyyy-mm-dd").parse("2020-01-01");
+        }
+        catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void main(String[] args) {
         Employee manager = new Employee("John", "Connor", "Manager");
 
-        manager.addRoom(new Room(1));
-        manager.addRoom(new Room(2));
+        Room managerRoom = new Room(1);
+        manager.addRoom(managerRoom);
+        manager.addRoom(developersRoom);
+        manager.setIdCard(new IdCard(yearBeginning));
 
-        IdCard cardForManager = new IdCard();
-        cardForManager.setDateExpire(new SimpleDateFormat("yyyy-mm-dd").parse("2020-01-01"));
-        manager.setIdCard(cardForManager);
+        printInfoFor(manager);
 
-        System.out.println(manager.getName() + " " + manager.getSurname() + " works as a " + manager.getPosition());
-        System.out.println("The card is valid until " + new SimpleDateFormat("yyyy-dd-mm").format(cardForManager.getDateExpire()));
+        Employee albert = addAndGetDeveloper("Albert", "O’Connor", "Developer");
+        printInfoFor(albert);
+        Employee adam = addAndGetDeveloper("Adam", "Gordon", "Developer");
+        printInfoFor(adam);
+    }
+
+    private static Employee addAndGetDeveloper(String name, String surname, String position) {
+        Employee employee = new Employee(name, surname, position);
+        employee.setIdCard(new IdCard(yearBeginning));
+        employee.addRoom(developersRoom);
+        developers.addEmpoyee(employee);
+
+        return employee;
+    }
+
+    private static void printInfoFor(Employee employee) {
+        System.out.println(employee.getName() + " " + employee.getSurname() + " works as a " + employee.getPosition());
+        System.out.println("The card is valid until " + new SimpleDateFormat("yyyy-dd-mm").format(employee.getIdCard().getDateExpire()));
+
+        printRoomsInfo(employee);
+
+        Department department = employee.getDepartment();
+        if (department != null) {
+            System.out.println("He belongs to the " + department.getName() + " department");
+        }
+
+        System.out.println();
+    }
+
+    private static void printRoomsInfo(Employee manager) {
         System.out.print("He may be in the rooms: ");
 
         String rooms = manager.getRooms().stream()
                     .map(room -> String.valueOf(room.getNumber()))
                     .collect(Collectors.joining(", "));
-        System.out.print(rooms);
-
+        System.out.println(rooms);
     }
 }

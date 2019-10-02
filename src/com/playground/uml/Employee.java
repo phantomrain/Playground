@@ -13,6 +13,9 @@ class Employee extends Man {
     //N-ary association
     private Set<Room> rooms = new HashSet<>();
 
+    //Aggregation
+    private Department department;
+
     Employee(String name, String surname, String position) {
         super(name, surname);
         this.position = position;
@@ -26,11 +29,23 @@ class Employee extends Man {
         this.idCard = idCard;
     }
 
+    IdCard getIdCard() {
+        return idCard;
+    }
+
     void addRoom(Room room) {
         rooms.add(room);
     }
 
     Set<Room> getRooms() {
         return rooms;
+    }
+
+    void setDepartment(Department department) {
+        this.department = department;
+    }
+
+    Department getDepartment() {
+        return department;
     }
 }
