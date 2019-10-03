@@ -3,11 +3,11 @@ package com.playground.uml;
 import java.util.HashSet;
 import java.util.Set;
 
-class Department {
+class Department implements Unit /* Realization */ {
 
     private String name;
 
-    //aggregation
+    //Aggregation
     private Set<Employee> employees = new HashSet<>();
 
     Department(String name) {
@@ -18,8 +18,13 @@ class Department {
         return name;
     }
 
-    void addEmpoyee(Employee newEmployee) {
+    void addEmployee(Employee newEmployee) {
         employees.add(newEmployee);
         newEmployee.setDepartment(this);
+    }
+
+    @Override
+    public int getPersonCount() {
+        return employees.size();
     }
 }

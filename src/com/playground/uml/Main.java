@@ -51,7 +51,7 @@ public class Main {
         Employee employee = new Employee(name, surname, DEVELOPER);
         employee.setIdCard(new IdCard(yearBeginning));
         employee.addRoom(DEVELOPERS_ROOM);
-        DEVELOPERS.addEmpoyee(employee);
+        DEVELOPERS.addEmployee(employee);
 
         return employee;
     }

@@ -13,6 +13,7 @@ class Menu {
         System.out.println();
 
         employees.forEach(Menu::printInfo);
+        printDepartmentsInfo(employees);
     }
 
     private static void printInfo(Employee employee) {
@@ -28,6 +29,14 @@ class Menu {
 
         printPastPositionInfoIfExists(employee);
         System.out.println();
+    }
+
+    private static void printDepartmentsInfo(List<Employee> employees) {
+        Set<Department> nonRepeatingDepartments = employees.stream().map(Employee::getDepartment).collect(Collectors.toSet());
+        nonRepeatingDepartments.forEach(department -> System.out.println("In the " + department.getName()
+                                                                                     + " department works "
+                                                                                     + department.getPersonCount()
+                                                                                     + " peoples"));
     }
 
     private static void printPastPositionInfoIfExists(Employee employee) {
