@@ -2,10 +2,9 @@ package com.playground.uml;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.Set;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
+import java.util.List;
 
 
 public class Main {
@@ -36,12 +35,16 @@ public class Main {
         Room managerRoom = new Room(1);
         john.addRoom(managerRoom);
 
-        printInfoFor(john);
-
         Employee albert = addAndGetDeveloper("Albert", "O’Connor");
-        printInfoFor(albert);
         Employee adam = addAndGetDeveloper("Adam", "Gordon");
-        printInfoFor(adam);
+
+        List<Employee> employees = new ArrayList<>();
+        employees.add(john);
+        employees.add(albert);
+        employees.add(adam);
+
+        //Dependency
+        Menu.showEmployees(employees);
     }
 
     private static Employee addAndGetDeveloper(String name, String surname) {
@@ -51,46 +54,5 @@ public class Main {
         DEVELOPERS.addEmpoyee(employee);
 
         return employee;
-    }
-
-    private static void printInfoFor(Employee employee) {
-        System.out.println(employee.getName() + " " + employee.getSurname() + " works as a " + employee.getPosition());
-        System.out.println("The card is valid until " + new SimpleDateFormat("yyyy-dd-mm").format(employee.getIdCard().getDateExpire()));
-
-        printRoomsInfo(employee);
-
-        Department department = employee.getDepartment();
-        if (department != null) {
-            System.out.println("He belongs to the " + department.getName() + " department");
-        }
-
-        printPastPositionInfoIfExists(employee);
-        System.out.println();
-    }
-
-    private static void printPastPositionInfoIfExists(Employee employee) {
-        Set<PastPosition> positions = employee.getPastPositions();
-        if (positions.isEmpty()) {
-            return;
-        }
-
-        System.out.print("Previously, he worked as a: ");
-        String pastPositions = positions.stream()
-                    .map(position -> position.getName() + " (Department: " + position.getDepartmentName() + ")")
-                    .collect(joinByComma());
-        System.out.println(pastPositions);
-    }
-
-    private static void printRoomsInfo(Employee manager) {
-        System.out.print("He may be in the rooms: ");
-
-        String rooms = manager.getRooms().stream()
-                    .map(room -> String.valueOf(room.getNumber()))
-                    .collect(joinByComma());
-        System.out.println(rooms);
-    }
-
-    private static Collector<CharSequence, ?, String> joinByComma() {
-        return Collectors.joining(", ");
     }
 }
