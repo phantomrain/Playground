@@ -1,6 +1,6 @@
 package com.playground.uml;
 
-class Room {
+class Room implements Comparable<Room> {
 
     private int number;
 
@@ -10,5 +10,10 @@ class Room {
 
     int getNumber() {
         return number;
+    }
+
+    @Override
+    public int compareTo(Room room) {
+        return Integer.compare(number, room.getNumber());
     }
 }

@@ -3,14 +3,17 @@ package com.playground.uml;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Set;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 
 public class Main {
 
+    private static final String DEVELOPER = "Developer";
     private static Date yearBeginning;
-    private static final Department developers = new Department("Developers");
-    private static final Room developersRoom = new Room(2);
+    private static final Department DEVELOPERS = new Department("Developers");
+    private static final Room DEVELOPERS_ROOM = new Room(2);
 
     static {
         try {
@@ -22,26 +25,30 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        Employee manager = new Employee("John", "Connor", "Manager");
+        Employee john = new Employee("John", "Connor", "System Administrator");
+        john.addRoom(DEVELOPERS_ROOM);
+        john.setIdCard(new IdCard(yearBeginning));
+        john.setDepartment(DEVELOPERS);
 
+        john.setPosition(DEVELOPER, DEVELOPERS);
+
+        john.setPosition("Manager", new Department("Managers"));
         Room managerRoom = new Room(1);
-        manager.addRoom(managerRoom);
-        manager.addRoom(developersRoom);
-        manager.setIdCard(new IdCard(yearBeginning));
+        john.addRoom(managerRoom);
 
-        printInfoFor(manager);
+        printInfoFor(john);
 
-        Employee albert = addAndGetDeveloper("Albert", "O’Connor", "Developer");
+        Employee albert = addAndGetDeveloper("Albert", "O’Connor");
         printInfoFor(albert);
-        Employee adam = addAndGetDeveloper("Adam", "Gordon", "Developer");
+        Employee adam = addAndGetDeveloper("Adam", "Gordon");
         printInfoFor(adam);
     }
 
-    private static Employee addAndGetDeveloper(String name, String surname, String position) {
-        Employee employee = new Employee(name, surname, position);
+    private static Employee addAndGetDeveloper(String name, String surname) {
+        Employee employee = new Employee(name, surname, DEVELOPER);
         employee.setIdCard(new IdCard(yearBeginning));
-        employee.addRoom(developersRoom);
-        developers.addEmpoyee(employee);
+        employee.addRoom(DEVELOPERS_ROOM);
+        DEVELOPERS.addEmpoyee(employee);
 
         return employee;
     }
@@ -57,7 +64,21 @@ public class Main {
             System.out.println("He belongs to the " + department.getName() + " department");
         }
 
+        printPastPositionInfoIfExists(employee);
         System.out.println();
+    }
+
+    private static void printPastPositionInfoIfExists(Employee employee) {
+        Set<PastPosition> positions = employee.getPastPositions();
+        if (positions.isEmpty()) {
+            return;
+        }
+
+        System.out.print("Previously, he worked as a: ");
+        String pastPositions = positions.stream()
+                    .map(position -> position.getName() + " (Department: " + position.getDepartmentName() + ")")
+                    .collect(joinByComma());
+        System.out.println(pastPositions);
     }
 
     private static void printRoomsInfo(Employee manager) {
@@ -65,7 +86,11 @@ public class Main {
 
         String rooms = manager.getRooms().stream()
                     .map(room -> String.valueOf(room.getNumber()))
-                    .collect(Collectors.joining(", "));
+                    .collect(joinByComma());
         System.out.println(rooms);
+    }
+
+    private static Collector<CharSequence, ?, String> joinByComma() {
+        return Collectors.joining(", ");
     }
 }

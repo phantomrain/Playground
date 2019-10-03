@@ -2,6 +2,8 @@ package com.playground.uml;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 class Employee extends Man {
 
@@ -11,10 +13,13 @@ class Employee extends Man {
     private IdCard idCard;
 
     //N-ary association
-    private Set<Room> rooms = new HashSet<>();
+    private SortedSet<Room> rooms = new TreeSet<>();
 
     //Aggregation
     private Department department;
+
+    //Composition
+    private Set<PastPosition> pastPositions = new HashSet<>();
 
     Employee(String name, String surname, String position) {
         super(name, surname);
@@ -47,5 +52,15 @@ class Employee extends Man {
 
     Department getDepartment() {
         return department;
+    }
+
+    Set<PastPosition> getPastPositions() {
+        return pastPositions;
+    }
+
+    void setPosition(String newPosition, Department newDepartment) {
+        pastPositions.add(new PastPosition(position, department));
+        position = newPosition;
+        department = newDepartment;
     }
 }
